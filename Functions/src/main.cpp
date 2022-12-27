@@ -33,18 +33,45 @@ int main() {
 
   // auto start = chrono::high_resolution_clock::now();
   Tree *root2 = new Tree(root->findNode(5));
-  // cout << root2->findNode(5)->getData() << '\n';
-  // cout << root2->findNode(5)->left->left->getData() << '\n';
-  // cout << root2->findNode(5)->right->getData() << '\n';
-  // cout << root2->getCount() << '\n';
 
   vector<int> sorted_words = root2->getSortedWords();
-  // cout << "2\n";
+  cout << "List\n";
   for (const auto n : sorted_words) {
     cout << n << '\n';
   }
 
+  cout << "node count: " << root2->getCount() << '\n';
+
+
+    Tree *root3 = new Tree(root->findNode(9));
+
+  vector<int> sorted_words3 = root3->getSortedWords();
+  cout << "List\n";
+  for (const auto n : sorted_words3) {
+    cout << n << '\n';
+  }
+
+  cout << "node count: " << root3->getCount() << '\n';
+
+  root->deleteKey(7);
+
+  vector<int> sorted_words4 = root2->getSortedWords();
+  cout << "List\n";
+  for (const auto n : sorted_words4) {
+    cout << n << '\n';
+  }
+
   cout << "node count: " << root2->calculateCount() << '\n';
+
+
+
+  vector<int> sorted_words5 = root3->getSortedWords();
+  cout << "List\n";
+  for (const auto n : sorted_words5) {
+    cout << n << '\n';
+  }
+
+  cout << "node count: " << root3->calculateCount() << '\n';
 
   /*auto stop = chrono::high_resolution_clock::now();
   auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);

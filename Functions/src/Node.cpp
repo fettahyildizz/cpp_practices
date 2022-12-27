@@ -41,11 +41,9 @@ int Node::getDepth() {
 
   Node *n = this;
   int depth_ = 1;
-  // cout << "data: " << n->getData() << '\n';
   while (n->parent != nullptr) {
 
     n = n->parent;
-    // cout << "data: " << n->getData() << '\n';
     depth_ += 1;
   }
   return depth_;
