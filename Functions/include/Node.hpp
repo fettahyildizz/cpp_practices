@@ -22,12 +22,13 @@ struct Node {
 	Node();
 	Node(const int& word_);
 	Node(const int& word_, const int& depth_);
+	void calculateMaxDepth(Node* root_);
 	void setParent(Node* n);
 	void setLeft(Node* n);
 	void setRight(Node* n);
 	void setData(const int& word_);
 	void setDepth(const int& depth_);
-	int getDepth();
+	int getDepth(Node *);
 	const Node getParent();
 	const int getData();
 

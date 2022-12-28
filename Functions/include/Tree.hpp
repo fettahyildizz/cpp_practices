@@ -30,7 +30,7 @@ public:
 	bool isHeightBalanced();
 	vector<int> getSortedWords();
 	int calculateCount();
-	void calculateMaxDepth();
+	int calculateMaxDepth();
 	const bool isLeaf(const Node* key_);
 	void setCount(const int& count_);
 	const int getCount();

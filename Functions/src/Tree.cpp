@@ -17,7 +17,7 @@ Tree::Tree(const int &word_) {
 Tree::Tree(Node *root_) {
   root = root_;
   count = this->calculateCount();
-  max_depth = this->getMaxDepth();
+  max_depth = this->calculateMaxDepth();
 }
 
 Tree::~Tree() {
@@ -347,84 +347,94 @@ void Tree::deleteKey(const int &data_) {
     }
   }
 }
+// TODO: 
+bool Tree::isHeightBalanced() {
+  Tree *left_subtree = new Tree(root->left);
+  Tree *right_subtree = new Tree(root->right);
+  if(abs(left_subtree->calculateMaxDepth() -
+  right_subtree->calculateMaxDepth()) > 1){
+    return false;
+  }
+  else{
 
-// bool Tree::isHeightBalanced() { ; }
+  }
+ }
 
 vector<int> Tree::getSortedWords() {
-    vector<int> data_list;
-    int ctr = 0;
-    Node *n = root;
-    while (ctr != count) {
-      // If right word is printed, traverse to parent node.
-      if ((n->right != nullptr) &&
-          (binary_search(data_list.begin(), data_list.end(),
-                         n->right->getData())) &&
-          (n != root)) {
-        n = n->parent;
-      }
+  vector<int> data_list;
+  int ctr = 0;
+  Node *n = root;
+  while (ctr != count) {
+    // If right word is printed, traverse to parent node.
+    if ((n->right != nullptr) &&
+        (binary_search(data_list.begin(), data_list.end(),
+                       n->right->getData())) &&
+        (n != root)) {
+      n = n->parent;
+    }
 
-      // If there is not left word and right word is not printed, print current
-      // node and traverse to right node.
-      else if ((n->left == nullptr) && (n->right != nullptr) &&
-               (!(binary_search(data_list.begin(), data_list.end(),
-                                n->right->getData())))) {
-        ctr += 1;
-        data_list.push_back(n->getData());
-        if (n->right != nullptr) {
-          n = n->right;
-          continue;
-        } else {
-          if (n != root)
-            n = n->parent;
-          else
-            break;
-        }
-      }
-
-      // If there is not left word and the word is not printed print the word.
-      // If there is not right world, go to parent.
-
-      else if ((n->left == nullptr) && (n->right == nullptr) &&
-               (!(binary_search(data_list.begin(), data_list.end(),
-                                n->getData())))) {
-        ctr += 1;
-        data_list.push_back((n->getData()));
-        if (n != root) {
+    // If there is not left word and right word is not printed, print current
+    // node and traverse to right node.
+    else if ((n->left == nullptr) && (n->right != nullptr) &&
+             (!(binary_search(data_list.begin(), data_list.end(),
+                              n->right->getData())))) {
+      ctr += 1;
+      data_list.push_back(n->getData());
+      if (n->right != nullptr) {
+        n = n->right;
+        continue;
+      } else {
+        if (n != root)
           n = n->parent;
-        } else {
+        else
+          break;
+      }
+    }
+
+    // If there is not left word and the word is not printed print the word.
+    // If there is not right world, go to parent.
+
+    else if ((n->left == nullptr) && (n->right == nullptr) &&
+             (!(binary_search(data_list.begin(), data_list.end(),
+                              n->getData())))) {
+      ctr += 1;
+      data_list.push_back((n->getData()));
+      if (n != root) {
+        n = n->parent;
+      } else {
+        break;
+      }
+    }
+
+    // If there is a left children node, traverse to left children node.
+    else if ((n->left != nullptr) &&
+             !(binary_search(data_list.begin(), data_list.end(),
+                             n->left->getData()))) {
+      n = n->left;
+      continue;
+    }
+
+    // If there is a left children node but you already pushed it back to
+    // list, then traverse to right node.
+    else if ((n->left != nullptr) &&
+             (binary_search(data_list.begin(), data_list.end(),
+                            n->left->getData()))) {
+      ctr += 1;
+      data_list.push_back(n->getData());
+      if (n->right != nullptr) {
+        n = n->right;
+      } else {
+        if (n != root)
+          n = n->parent;
+        else {
           break;
         }
       }
-
-      // If there is a left children node, traverse to left children node.
-      else if ((n->left != nullptr) &&
-               !(binary_search(data_list.begin(), data_list.end(),
-                               n->left->getData()))) {
-        n = n->left;
-        continue;
-      }
-
-      // If there is a left children node but you already pushed it back to
-      // list, then traverse to right node.
-      else if ((n->left != nullptr) &&
-               (binary_search(data_list.begin(), data_list.end(),
-                              n->left->getData()))) {
-        ctr += 1;
-        data_list.push_back(n->getData());
-        if (n->right != nullptr) {
-          n = n->right;
-        } else {
-          if (n != root)
-            n = n->parent;
-          else {
-            break;
-          }
-        }
-      }
     }
-    n = nullptr;
-    return data_list;
   }
+  n = nullptr;
+  return data_list;
+}
 
 int Tree::calculateCount() {
   vector<int> data_list;
@@ -515,99 +525,104 @@ int Tree::calculateCount() {
   return ctr;
 }
 
-
-void Tree::calculateMaxDepth() {
-  int ctr = 0;
+int Tree::calculateMaxDepth() {
   vector<int> data_list;
   int depth = 0;
   Node *n = root;
-  while (ctr != count) {
-    // If right word is printed, traverse to parent node.
-    if ((n->right != nullptr) &&
-        (binary_search(data_list.begin(), data_list.end(),
-                       n->right->getData())) &&
-        (n != root)) {
-      n = n->parent;
+  while (1) {
+    // If there is a left children node
+    if ((n->left != nullptr)) {
+      // If left children is not printed, traverse to left children node.
+      if (!(find(data_list.begin(), data_list.end(), n->left->getData()) !=
+            data_list.end())) {
+        n = n->left;
+        continue;
+      }
+      // If left children is printed
+      else {
+        // If left children is printed and there is a right children.
+        if (n->right != nullptr) {
+          // If right children is not printed, traverse to right children
+          if (!(find(data_list.begin(), data_list.end(), n->right->getData()) !=
+                data_list.end())) {
+            n = n->right;
+            continue;
+          }
+          // If right children is printed
+          else {
+            data_list.push_back((n->getData()));
+
+            if (n->getDepth(root) >= depth) {
+              depth = n->getDepth(root);
+            }
+            if (n == root) {
+              break;
+            } else {
+              n = n->parent;
+              continue;
+            }
+          }
+        }
+        // If left children is printed and there is not a right children.
+        // Print current node and if there is one, traverse to parent node.
+        else {
+          data_list.push_back((n->getData()));
+
+          if (n->getDepth(root) >= depth) {
+            depth = n->getDepth(root);
+          }
+          if (n == root) {
+            break;
+          } else {
+            n = n->parent;
+            continue;
+          }
+        }
+      }
     }
 
-    // If there is not left word and right word is not printed, print current
-    // node and traverse to right node.
-    else if ((n->left == nullptr) && (n->right != nullptr) &&
-             (!(binary_search(data_list.begin(), data_list.end(),
-                              n->right->getData())))) {
-      ctr += 1;
-      data_list.push_back(n->getData());
+    // If there is not a left children node, but there is only right children
+    // node.
+    else if (n->right != nullptr) {
+      // If right node is printed on the list.
+      if ((find(data_list.begin(), data_list.end(), n->right->getData()) !=
+           data_list.end())) {
+        data_list.push_back((n->getData()));
 
-      if (n->getDepth() >= depth) {
-        max_depth = n->getDepth();
-        depth = max_depth;
+        if (n->getDepth(root) >= depth) {
+          depth = n->getDepth(root);
+        }
+        if (n != root) {
+          n = n->parent;
+        } else {
+          break;
+        }
       }
-
-      if (n->right != nullptr) {
+      // If right children node is not printed.
+      else {
         n = n->right;
         continue;
-      } else {
-        if (n != root)
-          n = n->parent;
-        else
-          break;
       }
     }
-
-    // If there is not left word and the word is not printed print the word.
-    // If there is not right world, go to parent.
-
-    else if ((n->left == nullptr) && (n->right == nullptr) &&
-             (!(binary_search(data_list.begin(), data_list.end(),
-                              n->getData())))) {
-      ctr += 1;
+    // If there is no children node.
+    else if ((n->right == nullptr) && (n->left == nullptr)) {
       data_list.push_back((n->getData()));
 
-      if (n->getDepth() >= depth) {
-        max_depth = n->getDepth();
-        depth = max_depth;
+      if (n->getDepth(root) >= depth) {
+        depth = n->getDepth(root);
       }
-
       if (n != root) {
         n = n->parent;
       } else {
         break;
       }
-    }
-
-    // If there is a left children node, traverse to left children node.
-    else if ((n->left != nullptr) &&
-             !(binary_search(data_list.begin(), data_list.end(),
-                             n->left->getData()))) {
-      n = n->left;
-      continue;
-    }
-
-    // If there is a left children node but you already pushed it back to
-    // list, then traverse to right node.
-    else if ((n->left != nullptr) &&
-             (binary_search(data_list.begin(), data_list.end(),
-                            n->left->getData()))) {
-      ctr += 1;
-      data_list.push_back(n->getData());
-
-      if (n->getDepth() >= depth) {
-        max_depth = n->getDepth();
-        depth = max_depth;
-      }
-
-      if (n->right != nullptr) {
-        n = n->right;
-      } else {
-        if (n != root)
-          n = n->parent;
-        else {
-          break;
-        }
-      }
+    } else {
+      throw runtime_error("Error 1");
     }
   }
   n = nullptr;
+  max_depth = depth;
+  return depth;
 }
 
 void Tree::setCount(const int &count_) { count = count_; }
