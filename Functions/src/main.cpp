@@ -25,10 +25,11 @@ int main() {
   root->insert(19);
   root->insert(16);
   root->insert(17);
+  root->insert(18);
   root->insert(33);
   root->insert(24);
-  root->insert(2);
   root->insert(4);
+  root->insert(2);
   root->insert(1);
 
   Tree *root2 = new Tree(root->findNode(5));
@@ -36,6 +37,11 @@ int main() {
   // auto start = chrono::high_resolution_clock::now();
   cout << "Count: " << root2->getCount() << '\n';
   cout << "Max depth: " << root2->getMaxDepth() << '\n';
+  if (root2->isHeightBalanced()) {
+      cout << "Height is balanced \n";
+  }
+  else cout << "Height is not balanced. \n";
+  
 
   /*auto stop = chrono::high_resolution_clock::now();
   auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
