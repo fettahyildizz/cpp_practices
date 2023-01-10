@@ -32,12 +32,14 @@ int main() {
   root->insert(2);
   root->insert(1);
 
-  Tree *root2 = new Tree(root->findNode(5));
+  Tree *root2 = new Tree(root->findNode(15));
 
   // auto start = chrono::high_resolution_clock::now();
   cout << "Count: " << root2->getCount() << '\n';
   cout << "Max depth: " << root2->getMaxDepth() << '\n';
-  if (root2->isHeightBalanced()) {
+
+  // cout << "Height balanced: " << root2->isHeightBalanced() << '\n';
+  if (root->isHeightBalanced()) {
       cout << "Height is balanced \n";
   }
   else cout << "Height is not balanced. \n";
