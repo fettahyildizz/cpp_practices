@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
 
-	Tree* root = new Tree(20);
+	Tree<int>* root = new Tree(20);
 	/*for (int i = 0; i < 1000000; i++) {
 					root->insert(rand() % 1000000);
 	}*/
@@ -32,13 +32,11 @@ int main() {
 	root->insert(2);
 	root->insert(1);
 
-	Tree* root2 = new Tree(root->findNode(15));
-	Tree* root3 = new Tree(root->findNode(15));
-	Tree* root4 = new Tree(root->findNode(33));
-	Tree* root5 = new Tree(root->findNode(20));
-	Tree* root6 = new Tree(50);
+	Tree<int>* root2 = new Tree(root->findNode(15));
+	Tree<int>* root3 = new Tree(root->findNode(15));
+	Tree<int>* root4 = new Tree(root->findNode(33));
+	Tree<int>* root5 = new Tree(root->findNode(20));
 
-	Tree* root7 = new Tree(50);
 
 	if (*root == *root2) {
 		cout << "root == root2 \n";
