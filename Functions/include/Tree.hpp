@@ -21,6 +21,7 @@ private:
 	bool first_left_iter = true;
 
 public:
+	 bool operator== (Tree& rhs)const;
 	Tree(const int& word_);
 	Tree(Node* root_);
 	/**
@@ -50,6 +51,6 @@ public:
 	void setCount(const int& count_);
 	const int getCount();
 	const int getMaxDepth();
-	const Node* Tree::getRoot();
+	Node* Tree::getRoot();
 
 };

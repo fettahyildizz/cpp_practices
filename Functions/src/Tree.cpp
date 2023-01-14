@@ -32,10 +32,6 @@ Tree::Tree(vector<int>& sorted_array_) {
 	Node* node = root;
 
 	auto insert = [](Node* node_, vector<int>& sorted_array_, const size_t& parent_index_, int& count, vector<Node*>& nodes, auto& lambda) -> void {
-		//const size_t parent_index = floor((sorted_array_.size() / 2) + 1);
-
-
-
 		vector<int> split_low(sorted_array_.begin(), sorted_array_.begin() + parent_index_);
 		vector<int> split_high(sorted_array_.begin() + parent_index_ + 1, sorted_array_.end());
 		if (split_low.size() > 0) {
@@ -44,15 +40,6 @@ Tree::Tree(vector<int>& sorted_array_) {
 			node_->left->parent = node_;
 			count += 1;
 			nodes.push_back(node_->left);
-
-			cout << "Node: " << node_->getData() << '\n';
-			cout << "split_low: ";
-			for (auto a : split_low) {
-				cout << a << " ";
-			}
-			cout << '\n';
-			cout << "new node " << node_->left->getData() << " is inserted to left children node. \n";
-
 			lambda(node_->left, split_low, left_child_index, count, nodes, lambda);
 		}
 		if (split_high.size() > 0) {
@@ -74,8 +61,6 @@ Tree::Tree(vector<int>& sorted_array_) {
 			}
 		}
 	};
-
-
 	insert(root, sorted_array_, split_index, count, nodes, insert);
 }
 
@@ -83,6 +68,32 @@ Tree::~Tree() {
 	delete root;
 	for (const auto& node : nodes)
 		delete node;
+}
+
+bool Tree::operator== (Tree& rhs_) const {
+
+	auto traverse = [](Node* lhs_node, Node* rhs_node, auto& lambda) -> bool {
+		if ((rhs_node != nullptr) && (lhs_node != nullptr)) {
+			if (rhs_node->getData() != lhs_node->getData()) {
+				return false;
+			}
+			else {
+				lambda(rhs_node->left, lhs_node->left, lambda);
+				lambda(rhs_node->right, lhs_node->right, lambda);
+			}
+		}
+		else if ((rhs_node != nullptr) && (lhs_node == nullptr)) { cout << "2\n"; return false; }
+		else if ((rhs_node == nullptr) && (lhs_node != nullptr)) {
+			return false;
+		}
+		else {
+			return true;
+		}
+		
+	};
+	Node* node = this->root;
+	Node* rhs_node = rhs_.getRoot();
+	return traverse(node, rhs_node, traverse);
 }
 
 void Tree::insert(const int& data_) {
@@ -430,9 +441,6 @@ bool Tree::isHeightBalanced() {
 
 		Tree* left_subtree = new Tree(node->left);
 		Tree* right_subtree = new Tree(node->right);
-		cout << "node data: " << node->getData() << '\n';
-		cout << "left max depth: " << left_subtree->calculateMaxDepth() << '\n';
-		cout << "right max depth: " << right_subtree->calculateMaxDepth() << '\n';
 		if (abs(left_subtree->calculateMaxDepth() -
 			right_subtree->calculateMaxDepth()) > 1) {
 
@@ -443,20 +451,6 @@ bool Tree::isHeightBalanced() {
 			right_subtree->isHeightBalanced();
 		}
 	}
-
-	// else if ((node_->left != nullptr) && (node_->right == nullptr)) {
-	//   if ((node_->left->left != nullptr) || (node_->left->right != nullptr)) {
-	//     return false;
-	//   }
-	// }
-
-	// else if ((node_->right != nullptr) && (node_->left == nullptr)) {
-	//   if ((node_->right->left != nullptr) || (node_->right->right != nullptr))
-	//   {
-	//     return false;
-	//   }
-	// }
-	// If root has no children node.
 	else {
 		return true;
 	}
@@ -751,4 +745,4 @@ const bool Tree::isLeaf(const Node* key_) {
 }
 const int Tree::getCount() { return count; }
 const int Tree::getMaxDepth() { return max_depth; }
-const Node* Tree::getRoot() { return root; }
+Node* Tree::getRoot() { return root; }
