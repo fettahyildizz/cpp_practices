@@ -28,7 +28,7 @@ struct Node {
 	void setRight(Node* n);
 	void setData(const int& word_);
 	void setDepth(const int& depth_);
-	int getDepth(Node *);
+	int getDepth(Node*);
 	const Node getParent();
 	const int getData();
 
