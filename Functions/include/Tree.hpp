@@ -43,19 +43,19 @@ public:
 			cout << "This node does not exist.\n";
 		}
 	}
-	Tree(vector<int>& sorted_array_) {
+	Tree(vector<var>& sorted_array_) {
 		const size_t split_index = floor(static_cast<float>(sorted_array_.size() / 2));
-		root = new Node<int>(sorted_array_[split_index]);
+		root = new Node<var>(sorted_array_[split_index]);
 		count = 1;
 		nodes.push_back(root);
-		Node<int>* node = root;
+		Node<var>* node = root;
 
-		auto insert = [](Node<int>* node_, vector<int>& sorted_array_, const size_t& parent_index_, int& count, vector<Node<int>*>& nodes, auto& lambda) -> void {
-			vector<int> split_low(sorted_array_.begin(), sorted_array_.begin() + parent_index_);
-			vector<int> split_high(sorted_array_.begin() + parent_index_ + 1, sorted_array_.end());
+		auto insert = [](Node<var>* node_, vector<var>& sorted_array_, const size_t& parent_index_, int& count, vector<Node<var>*>& nodes, auto& lambda) -> void {
+			vector<var> split_low(sorted_array_.begin(), sorted_array_.begin() + parent_index_);
+			vector<var> split_high(sorted_array_.begin() + parent_index_ + 1, sorted_array_.end());
 			if (split_low.size() > 0) {
 				const size_t left_child_index = floor(static_cast<float>(split_low.size()) / 2);
-				node_->left = new Node<int>(split_low[left_child_index]);
+				node_->left = new Node<var>(split_low[left_child_index]);
 				node_->left->parent = node_;
 				count += 1;
 				nodes.push_back(node_->left);
@@ -64,7 +64,7 @@ public:
 			if (split_high.size() > 0) {
 				if (split_high.size() == 2) {
 					const size_t right_child_index = 0;
-					node_->right = new Node<int>(split_high[right_child_index]);
+					node_->right = new Node<var>(split_high[right_child_index]);
 					node_->right->parent = node_;
 					count += 1;
 					nodes.push_back(node_->left);
@@ -72,7 +72,7 @@ public:
 				}
 				else {
 					const size_t right_child_index = floor(static_cast<float>(split_high.size() / 2));
-					node_->right = new Node<int>(split_high[right_child_index]);
+					node_->right = new Node<var>(split_high[right_child_index]);
 					node_->right->parent = node_;
 					count += 1;
 					nodes.push_back(node_->left);
@@ -162,6 +162,17 @@ public:
 		}
 		n = nullptr;
 		// delete n;
+	}
+
+	Tree<var>* convertToBalanced() {
+		vector<var> sorted_words = this->getSortedWords();
+		Tree<var>* balanced_tree = new Tree(sorted_words);
+		return balanced_tree;
+	}
+
+	int shortestDistance(const var& first_, const var& second_) {
+		Node* first_node = this->findNode(first_);
+
 	}
 
 	Node<var>* findNode(const var& data_) {
@@ -475,8 +486,8 @@ public:
 		}
 	}
 
-	vector<int> getSortedWords() {
-		vector<int> data_list;
+	vector<var> getSortedWords() {
+		vector<var> data_list;
 		int ctr = 0;
 		Node<var>* n = root;
 		while (ctr != count) {

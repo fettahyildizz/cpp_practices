@@ -32,42 +32,29 @@ int main() {
 	root->insert(2);
 	root->insert(1);
 
-	Tree<int>* root2 = new Tree(root->findNode(15));
-	Tree<int>* root3 = new Tree(root->findNode(15));
-	Tree<int>* root4 = new Tree(root->findNode(33));
-	Tree<int>* root5 = new Tree(root->findNode(20));
+	Tree<int>* root2 = root->convertToBalanced();
+
+	// cout << "Height balanced: " << root2->isHeightBalanced() << '\n';
+	if (root->isHeightBalanced()) {
+		cout << "Root is Height  balanced \n";
+	}
+	else cout << "Root Height is not balanced. \n";
+
+	if (root2->isHeightBalanced()) {
+		cout << "Root2 is Height  balanced \n";
+	}
+	else cout << "Root2 Height is not balanced. \n";
+
+	cout << "ROOT************************* \n";
+	cout << "Count: " << root->getCount() << '\n';
+	cout << "Max depth: " << root->calculateMaxDepth() << '\n';
+	cout << "Root data: " << root->getRoot()->data << '\n';
+
+	cout << "\n\n\n ROOT2 ******************* \n";
+	cout << "Count: " << root2->getCount() << '\n';
+	cout << "Max depth: " << root2->calculateMaxDepth() << '\n';
+	cout << "Root data: " << root2->getRoot()->data << '\n';
 
 
-	if (*root == *root2) {
-		cout << "root == root2 \n";
-	}
-	else {
-		cout << "root != root2 \n";
-	}
-	if (*root2 == *root3) {
-		cout << "root2 == root3 \n";
-	}
-	else {
-		cout << "root2 != root3 \n";
-	}
-	if (*root3 == *root4) {
-		cout << "root3 == root4 \n";
-	}
-	else {
-		cout << "root3 != root4 \n";
-	}
-	if (*root6 == *root7) {
-		cout << "root6 == root7 \n";
-	}
-	else {
-		cout << "root6 != root7 \n";
-	}
-	// auto start = chrono::high_resolution_clock::now();
-	//cout << "Count: " << root2->getCount() << '\n';
-	//cout << "Max depth: " << root2->getMaxDepth() << '\n';
-
-	/*auto stop = chrono::high_resolution_clock::now();
-	auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
-	cout << duration.count() << endl;*/
 	return 0;
 }
