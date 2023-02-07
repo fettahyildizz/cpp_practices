@@ -50,7 +50,7 @@ public:
 		nodes.push_back(root);
 		Node<var>* node = root;
 
-		auto insert = [](Node<var>* node_, vector<var>& sorted_array_, const size_t& parent_index_, int& count, vector<Node<var>*>& nodes, auto& lambda) -> void {
+		auto insert = [](Node<var>* node_, vector<var>& sorted_array_, const size_t& parent_index_, int& count, vector<Node<var>*>& nodes, auto&& lambda) -> void {
 			vector<var> split_low(sorted_array_.begin(), sorted_array_.begin() + parent_index_);
 			vector<var> split_high(sorted_array_.begin() + parent_index_ + 1, sorted_array_.end());
 			if (split_low.size() > 0) {
@@ -89,6 +89,7 @@ public:
 			delete node;
 	}
 
+	// Check equality.
 	bool operator== (Tree& rhs_) const {
 
 		auto traverse = [](Node<var>* lhs_node, Node<var>* rhs_node, auto& lambda) -> bool {
@@ -101,7 +102,10 @@ public:
 					lambda(rhs_node->right, lhs_node->right, lambda);
 				}
 			}
-			else if ((rhs_node != nullptr) && (lhs_node == nullptr)) { cout << "2\n"; return false; }
+			else if ((rhs_node != nullptr) && (lhs_node == nullptr))
+			{
+				return false;
+			}
 			else if ((rhs_node == nullptr) && (lhs_node != nullptr)) {
 				return false;
 			}
@@ -170,9 +174,126 @@ public:
 		return balanced_tree;
 	}
 
-	int shortestDistance(const var& first_, const var& second_) {
-		Node* first_node = this->findNode(first_);
+	int findDistance(const var& first_, const var& second_) {
+		unsigned int distance = 0;
+		Node<var>* first_node = root;
+		Node<var>* second_node = root;
+		bool flag_ = true;
+		bool first_goes_right, second_goes_right;
 
+		// Recursive lambda function.
+		auto find_distance = [](Node<var>* first_node_, Node<var>* second_node_, const var& first_, const var& second_, unsigned int& distance, bool flag_, auto&& lambda) -> void {
+			// If both nodes are NOT distancing away.
+			if (flag_) {
+				if (first_ < first_node_->getData()) {
+					first_node_ = first_node_->left;
+					if (second_ < second_node_->getData()) {
+						second_node_ = second_node_->left;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+					else if (second_ > second_node_->getData()) {
+						second_node_ = second_node_->right;
+						flag_ = false;
+						distance = 2;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+					// Second is same with second_node
+					else {
+						flag_ = false;
+						distance = 1;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+				}
+				else if (first_ > first_node_->getData()) {
+					first_node_ = first_node_->right;
+					if (second_ < second_node_->getData()) {
+						second_node_ = second_node_->left;
+						flag_ = false;
+						distance = 2;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+					else if (second_ > second_node_->getData()) {
+						second_node_ = second_node_->right;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+					else {
+						flag_ = false;
+						distance = 1;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+				}
+				// First is same with first_node
+				else {
+					if (second_ < second_node_->getData()) {
+						second_node_ = second_node_->left;
+						flag_ = false;
+						distance = 1;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+					else if (second_ > second_node_->getData()) {
+						second_node_ = second_node_->right;
+						flag_ = false;
+						distance = 1;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+				}
+			}
+			// If both nodes are distancing away.
+			else {
+				if (first_ < first_node_->getData()) {
+					first_node_ = first_node_->left;
+					distance += 1;
+					if (second_ < second_node_->getData()) {
+						second_node_ = second_node_->left;
+						distance += 1;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+					else if (second_ > second_node_->getData()) {
+						second_node_ = second_node_->right;
+						distance += 1;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+					else {
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+				}
+				else if (first_ > first_node_->getData()) {
+					first_node_ = first_node_->right;
+					distance += 1;
+					if (second_ < second_node_->getData()) {
+						second_node_ = second_node_->left;
+						distance += 1;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+					else if (second_ > second_node_->getData()) {
+						second_node_ = second_node_->right;
+						distance += 1;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+					else {
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+				}
+				// First is same with first_node
+				else {
+					if (second_ < second_node_->getData()) {
+						second_node_ = second_node_->left;
+						distance += 1;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+					else if (second_ > second_node_->getData()) {
+						second_node_ = second_node_->right;
+						distance += 1;
+						lambda(first_node_, second_node_, first_, second_, distance, flag_, lambda);
+					}
+				}
+			}
+
+		};
+
+		find_distance(first_node, second_node, first_, second_, distance, flag_, find_distance);
+
+		return distance;
 	}
 
 	Node<var>* findNode(const var& data_) {

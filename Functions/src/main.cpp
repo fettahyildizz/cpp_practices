@@ -35,25 +35,17 @@ int main() {
 	Tree<int>* root2 = root->convertToBalanced();
 
 	// cout << "Height balanced: " << root2->isHeightBalanced() << '\n';
-	if (root->isHeightBalanced()) {
-		cout << "Root is Height  balanced \n";
-	}
-	else cout << "Root Height is not balanced. \n";
-
-	if (root2->isHeightBalanced()) {
-		cout << "Root2 is Height  balanced \n";
-	}
-	else cout << "Root2 Height is not balanced. \n";
-
-	cout << "ROOT************************* \n";
-	cout << "Count: " << root->getCount() << '\n';
-	cout << "Max depth: " << root->calculateMaxDepth() << '\n';
-	cout << "Root data: " << root->getRoot()->data << '\n';
-
-	cout << "\n\n\n ROOT2 ******************* \n";
-	cout << "Count: " << root2->getCount() << '\n';
-	cout << "Max depth: " << root2->calculateMaxDepth() << '\n';
-	cout << "Root data: " << root2->getRoot()->data << '\n';
+	
+	cout << "Distance between 20 and 37 " << root->findDistance(20, 37) << '\n';
+	cout << "Distance between 15 and 37 " << root->findDistance(15, 37) << '\n';
+	cout << "Distance between 19 and 37 " << root->findDistance(19, 37) << '\n';
+	cout << "Distance between 5 and 33 " << root->findDistance(5, 33) << '\n';
+	cout << "Distance between 1 and 6 " << root->findDistance(1, 6) << '\n';
+	cout << "Distance between 1 and 20 " << root->findDistance(1, 20) << '\n';
+	cout << "Distance between 20 and 20 " << root->findDistance(20, 20) << '\n';
+	cout << "Distance between 5 and 5 " << root->findDistance(5, 5) << '\n';
+	cout << "Distance between 1 and 2 " << root->findDistance(1, 2) << '\n';
+	cout << "Distance between 1 and 13 " << root->findDistance(1, 13) << '\n';
 
 
 	return 0;
